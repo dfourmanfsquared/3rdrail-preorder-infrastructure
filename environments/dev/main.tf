@@ -1,6 +1,6 @@
 locals {
   environment = "dev"
-  project     = "traininv"
+  project     = "thirdrail"
   location    = "eastus"
 
   common_tags = {
@@ -71,11 +71,11 @@ resource "azurerm_cosmosdb_sql_database" "cosmos-sql-db" {
 }
 
 resource "azurerm_cosmosdb_sql_container" "thirdrail-cosmos-sql-db-container" {
-  name                  = "trains"
+  name                  = "orders"
   resource_group_name   = azurerm_resource_group.thirdrail_rg.name
   account_name          = azurerm_cosmosdb_account.cosmosaccount.name
   database_name         = azurerm_cosmosdb_sql_database.cosmos-sql-db.name
-  partition_key_paths   = ["/id"]
+  partition_key_paths   = ["/email"]
   partition_key_version = 1
   throughput            = 400
 
