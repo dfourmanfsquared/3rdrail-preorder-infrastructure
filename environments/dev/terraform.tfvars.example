@@ -1,0 +1,5 @@
+# Example terraform.tfvars file
+# Copy this file to terraform.tfvars and fill in actual values
+# NEVER commit terraform.tfvars to version control
+
+# vm_size = "Standard_B2s"
