@@ -176,7 +176,7 @@ resource "azurerm_key_vault_access_policy" "terraform-access-policy" {
 }
 
 resource "azurerm_key_vault_secret" "cosmos-db-endpoint" {
-  name         = "3rdrail-cosmos-url"
+  name         = "thirdrail-cosmos-url"
   value        = azurerm_cosmosdb_account.cosmosaccount.endpoint
   key_vault_id = "${azurerm_key_vault.vault.id}"
     depends_on = [
@@ -184,8 +184,8 @@ resource "azurerm_key_vault_secret" "cosmos-db-endpoint" {
     ]
 }
 
-resource "azurerm_key_vault_secret" "3rdrail-cosmos-key" {
-  name         = "3rdrail-cosmos-key"
+resource "azurerm_key_vault_secret" "thirdrail-cosmos-key" {
+  name         = "thirdrail-cosmos-key"
   value        = azurerm_cosmosdb_account.cosmosaccount.primary_key
   key_vault_id = "${azurerm_key_vault.vault.id}"
     depends_on = [
