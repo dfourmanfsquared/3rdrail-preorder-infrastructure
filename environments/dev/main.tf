@@ -107,7 +107,7 @@ resource "azurerm_linux_web_app" "thirdrail-service-app" {
 
 app_settings ={
 
-    "AZURE-VAULT-URI" = azurerm_key_vault.vault.vault_uri
+    "AZURE_VAULT_URI" = azurerm_key_vault.vault.vault_uri
 }
 
   identity {
