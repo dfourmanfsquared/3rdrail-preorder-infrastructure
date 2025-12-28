@@ -107,7 +107,7 @@ resource "azurerm_linux_web_app" "thirdrail-service-app" {
 
 app_settings ={
 
-    "AZURE_VAULT_URI" = azurerm_key_vault.vault.vault_uri
+    "AZURE-VAULT-URI" = azurerm_key_vault.vault.vault_uri
 }
 
   identity {
@@ -263,6 +263,6 @@ resource "azurerm_key_vault_secret" "WIX-api-key" {
 
 resource "azurerm_key_vault_secret" "WIX-site-id" {
   name         = "WIX-SITE-ID"
-  value        = "5594e47f-433a-4d68-917a-b719e561db01"
+  value        = "49bd8033-547b-411e-81e5-644d8a2b4692"
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
