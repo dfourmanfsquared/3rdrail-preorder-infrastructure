@@ -252,7 +252,7 @@ resource "azurerm_key_vault_secret" "WIX-site-id" {
 
 resource "azurerm_key_vault_secret" "CLOVER-api-key" {
   name         = "CLOVER-API-KEY"
-  value        = "782fae8f-c6da-326a-525f-43f3db992aac"
+  value        = "fa2081a4-6f27-2148-eb05-609a9d237894"
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
