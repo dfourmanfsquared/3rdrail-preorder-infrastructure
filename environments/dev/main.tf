@@ -268,13 +268,13 @@ resource "azurerm_key_vault_secret" "CLOVER-environment" {
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
-resource "azurerm_key_vault_secret" "CLOVER-environment" {
+resource "azurerm_key_vault_secret" "CLOVER-success-redirect-url" {
   name         = "CLOVER-SUCCESS-REDIRECT-URL"
   value        = "http://localhost:5173/payment/callback"
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
-resource "azurerm_key_vault_secret" "CLOVER-environment" {
+resource "azurerm_key_vault_secret" "CLOVER-failure-redirect-url" {
   name         = "CLOVER-FAILURE-REDIRECT-URL"
   value        = "http://localhost:5173/payment/callback"
   key_vault_id = "${azurerm_key_vault.vault.id}"
