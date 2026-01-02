@@ -70,23 +70,6 @@ resource "azurerm_cosmosdb_sql_database" "cosmos-sql-db" {
   throughput          = 400
 }
 
-resource "azurerm_cosmosdb_sql_container" "thirdrail-cosmos-sql-db-container" {
-  name                  = "orders"
-  resource_group_name   = azurerm_resource_group.thirdrail_rg.name
-  account_name          = azurerm_cosmosdb_account.cosmosaccount.name
-  database_name         = azurerm_cosmosdb_sql_database.cosmos-sql-db.name
-  partition_key_paths   = ["/email"]
-  partition_key_version = 1
-  throughput            = 400
-
-  indexing_policy {
-    indexing_mode = "consistent"
-    included_path {
-      path = "/*"
-    }
-  }
-}
-
 resource "azurerm_linux_web_app" "thirdrail-service-app" {
   name                = "thirdrail-app-${local.environment}"
   resource_group_name      = azurerm_resource_group.thirdrail_rg.name
@@ -264,5 +247,35 @@ resource "azurerm_key_vault_secret" "WIX-api-key" {
 resource "azurerm_key_vault_secret" "WIX-site-id" {
   name         = "WIX-SITE-ID"
   value        = "49bd8033-547b-411e-81e5-644d8a2b4692"
+  key_vault_id = "${azurerm_key_vault.vault.id}"
+}
+
+resource "azurerm_key_vault_secret" "CLOVER-api-key" {
+  name         = "CLOVER-API-KEY"
+  value        = "782fae8f-c6da-326a-525f-43f3db992aac"
+  key_vault_id = "${azurerm_key_vault.vault.id}"
+}
+
+resource "azurerm_key_vault_secret" "CLOVER-merchant-id" {
+  name         = "CLOVER-MERCHANT-ID"
+  value        = "TJXQX9E8BKNJ1"
+  key_vault_id = "${azurerm_key_vault.vault.id}"
+}
+
+resource "azurerm_key_vault_secret" "CLOVER-environment" {
+  name         = "CLOVER-ENVIRONMENT"
+  value        = "sandbox"
+  key_vault_id = "${azurerm_key_vault.vault.id}"
+}
+
+resource "azurerm_key_vault_secret" "CLOVER-environment" {
+  name         = "CLOVER-SUCCESS-REDIRECT-URL"
+  value        = "http://localhost:5173/payment/callback"
+  key_vault_id = "${azurerm_key_vault.vault.id}"
+}
+
+resource "azurerm_key_vault_secret" "CLOVER-environment" {
+  name         = "CLOVER-FAILURE-REDIRECT-URL"
+  value        = "http://localhost:5173/payment/callback"
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
