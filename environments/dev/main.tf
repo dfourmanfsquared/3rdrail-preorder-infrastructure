@@ -35,7 +35,7 @@ resource "azurerm_storage_account" "thirdrail_resources_sa" {
 resource "azurerm_storage_account_static_website" "thirdrail_resources_sa_website" {
   storage_account_id = azurerm_storage_account.thirdrail_resources_sa.id
   error_404_document = "custom_not_found.html"
-  index_document     = "custom_index.html"
+  index_document     = "index.html"
 }
 
 resource "random_integer" "ri" {
