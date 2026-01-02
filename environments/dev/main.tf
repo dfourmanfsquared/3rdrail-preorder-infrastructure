@@ -264,7 +264,7 @@ resource "azurerm_key_vault_secret" "CLOVER-merchant-id" {
 
 resource "azurerm_key_vault_secret" "CLOVER-environment" {
   name         = "CLOVER-ENVIRONMENT"
-  value        = "sandbox"
+  value        = "production"
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
