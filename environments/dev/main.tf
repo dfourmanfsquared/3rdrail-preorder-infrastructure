@@ -252,19 +252,19 @@ resource "azurerm_key_vault_secret" "WIX-site-id" {
 
 resource "azurerm_key_vault_secret" "CLOVER-api-key" {
   name         = "CLOVER-API-KEY"
-  value        = "6234c741-a03b-ea9a-8f3b-728f0ad02d67"
+  value        = "fa2081a4-6f27-2148-eb05-609a9d237894"
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
 resource "azurerm_key_vault_secret" "CLOVER-merchant-id" {
   name         = "CLOVER-MERCHANT-ID"
-  value        = "SM72XK4Y9RXH1"
+  value        = "TJXQX9E8BKNJ1"
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
 resource "azurerm_key_vault_secret" "CLOVER-environment" {
   name         = "CLOVER-ENVIRONMENT"
-  value        = "production"
+  value        = "sandbox"
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
@@ -282,6 +282,6 @@ resource "azurerm_key_vault_secret" "CLOVER-failure-redirect-url" {
 
 resource "azurerm_key_vault_secret" "CLOVER-webhook-secret" {
   name         = "CLOVER-WEBHOOK-SECRET"
-  value        = "hcp_d29b066fc4470e799422bc7e2970106c"
+  value        = "hcp_cf556056397ecc7fb292b8313a34ee50"
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
