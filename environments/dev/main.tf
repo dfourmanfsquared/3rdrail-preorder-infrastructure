@@ -252,7 +252,7 @@ resource "azurerm_key_vault_secret" "WIX-site-id" {
 
 resource "azurerm_key_vault_secret" "CLOVER-api-key" {
   name         = "CLOVER-API-KEY"
-  value        = "fa2081a4-6f27-2148-eb05-609a9d237894"
+  value        = "5cdc1a4b-7e78-31b2-81a7-dd0386dd43b5"
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
@@ -268,20 +268,10 @@ resource "azurerm_key_vault_secret" "CLOVER-environment" {
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
-resource "azurerm_key_vault_secret" "CLOVER-success-redirect-url" {
-  name         = "CLOVER-SUCCESS-REDIRECT-URL"
-  value        = "https://thirdraildevresources.z13.web.core.windows.net/payment/callback"
+resource "azurerm_key_vault_secret" "CLOVER-public-token-secret" {
+  name         = "CLOVER-PUBLIC-TOKEN"
+  value        = "c2939d909c1a3481b7771e7d165861c6"
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
-resource "azurerm_key_vault_secret" "CLOVER-failure-redirect-url" {
-  name         = "CLOVER-FAILURE-REDIRECT-URL"
-  value        = "https://thirdraildevresources.z13.web.core.windows.net/payment/callback"
-  key_vault_id = "${azurerm_key_vault.vault.id}"
-}
 
-resource "azurerm_key_vault_secret" "CLOVER-webhook-secret" {
-  name         = "CLOVER-WEBHOOK-SECRET"
-  value        = "hcp_cf556056397ecc7fb292b8313a34ee50"
-  key_vault_id = "${azurerm_key_vault.vault.id}"
-}
