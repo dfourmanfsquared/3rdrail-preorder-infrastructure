@@ -34,7 +34,7 @@ resource "azurerm_storage_account" "thirdrail_resources_sa" {
 
 resource "azurerm_storage_account_static_website" "thirdrail_resources_sa_website" {
   storage_account_id = azurerm_storage_account.thirdrail_resources_sa.id
-  error_404_document = "custom_not_found.html"
+  error_404_document = "index.html"
   index_document     = "index.html"
 }
 
@@ -271,6 +271,30 @@ resource "azurerm_key_vault_secret" "CLOVER-environment" {
 resource "azurerm_key_vault_secret" "CLOVER-public-token-secret" {
   name         = "CLOVER-PUBLIC-TOKEN"
   value        = "c2939d909c1a3481b7771e7d165861c6"
+  key_vault_id = "${azurerm_key_vault.vault.id}"
+}
+
+
+
+resource "azurerm_key_vault_secret" "paypal-client-id-secret" {
+  name         = "PAYPAL-CLIENT-ID"
+  value        = "AZTzsoATQwMulUG6Lsga62w0c3J6KOdogGKqO-IIlG3MByxtMO2pj6r_7N5a2YHMRyEPnzloWdATG0E-"
+  key_vault_id = "${azurerm_key_vault.vault.id}"
+}
+
+
+
+resource "azurerm_key_vault_secret" "paypal-client-secret" {
+  name         = "PAYPAL-CLIENT-SECRET"
+  value        = "EGJYNyA9ZXnVJ0ahpcoviGXkm3kwOJiKbVgDAI4DpHMRnH5d_92U9bW8YHEfn0ciwWqZdLs9eDs1MpAM"
+  key_vault_id = "${azurerm_key_vault.vault.id}"
+}
+
+
+
+resource "azurerm_key_vault_secret" "paypal-environment-secret" {
+  name         = "PAYPAL-ENVIRONMENT"
+  value        = "sandbox"
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
