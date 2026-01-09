@@ -250,27 +250,27 @@ resource "azurerm_key_vault_secret" "WIX-site-id" {
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
-resource "azurerm_key_vault_secret" "CLOVER-api-key" {
-  name         = "CLOVER-API-KEY"
-  value        = "5cdc1a4b-7e78-31b2-81a7-dd0386dd43b5"
+resource "azurerm_key_vault_secret" "AUTHORIZENET-api-login-id" {
+  name         = "AUTHORIZENET-API-LOGIN-ID"
+  value        = "4UpNc688bh4Y"
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
-resource "azurerm_key_vault_secret" "CLOVER-merchant-id" {
-  name         = "CLOVER-MERCHANT-ID"
-  value        = "TJXQX9E8BKNJ1"
+resource "azurerm_key_vault_secret" "AUTHORIZENET-transaction-key" {
+  name         = "AUTHORIZENET-TRANSACTION-KEY"
+  value        = "9cuhCWm36Qf4A83q"
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
-resource "azurerm_key_vault_secret" "CLOVER-environment" {
-  name         = "CLOVER-ENVIRONMENT"
+resource "azurerm_key_vault_secret" "AUTHORIZENET-environment" {
+  name         = "AUTHORIZENET-ENVIRONMENT"
   value        = "sandbox"
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
-resource "azurerm_key_vault_secret" "CLOVER-public-token-secret" {
-  name         = "CLOVER-PUBLIC-TOKEN"
-  value        = "c2939d909c1a3481b7771e7d165861c6"
+resource "azurerm_key_vault_secret" "AUTHORIZENET-client-key" {
+  name         = "AUTHORIZENET-CLIENT-KEY"
+  value        = "29pfb49hBXF7yayV3yP6rZX9aPgQjLyJ739agN5Xwh8y64KZw7a96eGY54p93vyg"
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
