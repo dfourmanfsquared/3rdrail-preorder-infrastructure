@@ -81,8 +81,8 @@ resource "azurerm_linux_web_app" "thirdrail-service-app" {
     always_on = true
     application_stack  {
       java_server         = "JAVA"
-      java_server_version = "17" 
-      java_version        = "17" 
+      java_server_version = "21" 
+      java_version        = "21" 
     }
     health_check_path = "/health"
     health_check_eviction_time_in_min = 5
