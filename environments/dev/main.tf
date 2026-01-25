@@ -190,7 +190,7 @@ resource "azurerm_key_vault_access_policy" "thirdrail-service-policy" {
 resource "azurerm_key_vault_access_policy" "daniel-access-policy" {
   key_vault_id = azurerm_key_vault.vault.id
     tenant_id = "${data.azurerm_client_config.current.tenant_id}"
-    object_id = "cf2c9115-40a3-4675-b53a-74b701ef7db1"
+    object_id = "f711253b-6afe-4c8a-ac8a-4984a73c57b0"  # Daniel's object ID
 
     secret_permissions = [
       "Get",

@@ -10,7 +10,7 @@ terraform {
   # Uncomment and configure for remote state storage
    backend "azurerm" {
      resource_group_name  = "tfstate-rg"
-     storage_account_name = "traininvtfstate"
+     storage_account_name = "thirdrailtfstate"
      container_name       = "tfstate"
      key                  = "dev.thirdrail.terraform.tfstate"
   }
