@@ -18,13 +18,13 @@ env:
 
 jobs:
   plan:
-    name: Plan - dev
+    name: Plan - prod
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
     defaults:
       run:
-        working-directory: environments/dev
+        working-directory: environments/prod
 
     steps:
       - name: Checkout

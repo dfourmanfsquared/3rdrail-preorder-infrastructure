@@ -12,7 +12,7 @@ terraform {
      resource_group_name  = "tfstate-rg"
      storage_account_name = "thirdrailtfstate"
      container_name       = "tfstate"
-     key                  = "dev.thirdrail.terraform.tfstate"
+     key                  = "prod.thirdrail.terraform.tfstate"
   }
 }
 
