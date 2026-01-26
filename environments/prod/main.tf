@@ -108,7 +108,7 @@ app_settings ={
 
 
 resource "azurerm_key_vault" "vault" {
-  name                        = "thirdrail-vault-${local.environment}"
+  name                        = "thirdrail-vault2-${local.environment}"
   resource_group_name      = azurerm_resource_group.thirdrail_rg.name
   location                 = azurerm_resource_group.thirdrail_rg.location
   enabled_for_disk_encryption = true
