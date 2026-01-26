@@ -1,7 +1,7 @@
 locals {
   environment = "prod"
   project     = "thirdrail"
-  location    = "eastus"
+  location    = "centralus"
 
   common_tags = {
     ManagedBy   = "terraform"
@@ -54,7 +54,7 @@ resource "azurerm_cosmosdb_account" "cosmosaccount" {
   }
 
   geo_location {
-    location          = "eastus"
+    location          = local.location
     failover_priority = 0
   }
 }
