@@ -211,60 +211,65 @@ resource "azurerm_key_vault_secret" "WIX-api-key" {
   name         = "WIX-API-KEY"
   value        = "IST.eyJraWQiOiJQb3pIX2FDMiIsImFsZyI6IlJTMjU2In0.eyJkYXRhIjoie1wiaWRcIjpcIjhlMDMzZGE2LWMyYmMtNDI5NS05ODQ5LWVjNjc2NTg1MGQ0ZFwiLFwiaWRlbnRpdHlcIjp7XCJ0eXBlXCI6XCJhcHBsaWNhdGlvblwiLFwiaWRcIjpcImY4YmM4YmM1LTc4NTQtNGRjYy04Y2UyLTNlYTZjNGY3OTczMFwifSxcInRlbmFudFwiOntcInR5cGVcIjpcImFjY291bnRcIixcImlkXCI6XCI1NTk0ZTQ3Zi00MzNhLTRkNjgtOTE3YS1iNzE5ZTU2MWRiMDFcIn19IiwiaWF0IjoxNzY2OTM5ODIwfQ.WTvlceICU0CQfSMrEd9P8KWIHIWtAW2sMs5TwZI9WuYs9e9p6msAgyCXPsxcw2fR4E1Yw3GlkP007mKOk4acgjzyK0WQ9awzlDwhQbfI6EdzcboAIjlljfu9eBWkPP-CZTBpvFTnl8cnkpqvBpt8g-wsmD7KDE_eqcVrrVBNbDJEyEf8Cv2-FTjh-HwahTqcRnngcOw6WRCp0uoNPCbIiqXSZhqRCA6ljp87EIUrySheza4SINi8cz2rttObPL1NbilwCLjuHqeBlfzHRkDHNqd9f8ygu-0myOw5hVt4-0QJtp8DSmq9RlGDCTEJkg5DZ66MVCDS0jPMIMRwFztNJw"
   key_vault_id = "${azurerm_key_vault.vault.id}"
+  depends_on   = [azurerm_key_vault_access_policy.terraform-access-policy]
 }
 
 resource "azurerm_key_vault_secret" "WIX-site-id" {
   name         = "WIX-SITE-ID"
   value        = "49bd8033-547b-411e-81e5-644d8a2b4692"
   key_vault_id = "${azurerm_key_vault.vault.id}"
+  depends_on   = [azurerm_key_vault_access_policy.terraform-access-policy]
 }
 
 resource "azurerm_key_vault_secret" "AUTHORIZENET-api-login-id" {
   name         = "AUTHORIZENET-API-LOGIN-ID"
   value        = "7SL5ke25"
   key_vault_id = "${azurerm_key_vault.vault.id}"
+  depends_on   = [azurerm_key_vault_access_policy.terraform-access-policy]
 }
 
 resource "azurerm_key_vault_secret" "AUTHORIZENET-transaction-key" {
   name         = "AUTHORIZENET-TRANSACTION-KEY"
   value        = "9Q942kX5dwU3y353"
   key_vault_id = "${azurerm_key_vault.vault.id}"
+  depends_on   = [azurerm_key_vault_access_policy.terraform-access-policy]
 }
 
 resource "azurerm_key_vault_secret" "AUTHORIZENET-environment" {
   name         = "AUTHORIZENET-ENVIRONMENT"
   value        = "sandbox"
   key_vault_id = "${azurerm_key_vault.vault.id}"
+  depends_on   = [azurerm_key_vault_access_policy.terraform-access-policy]
 }
 
 resource "azurerm_key_vault_secret" "AUTHORIZENET-client-key" {
   name         = "AUTHORIZENET-CLIENT-KEY"
   value        = "5Wjac683WVdza2DGzxHu68jDP37ERGYz98wPVUKhvtM6e438MapP9L6zFZgwNk3F"
   key_vault_id = "${azurerm_key_vault.vault.id}"
+  depends_on   = [azurerm_key_vault_access_policy.terraform-access-policy]
 }
-
 
 #LIVE AciPv-bQ1ZLnqGKMYQUQ7kxCN9RhnxY10C5UX55YKKTpa3yCrh7gJejKpuB38txKfKk_LHd7WTnSrg6W
 resource "azurerm_key_vault_secret" "paypal-client-id-secret" {
   name         = "PAYPAL-CLIENT-ID"
   value        = "AUwDTyJ7Ob8XKbR4S8WRqKBfX4q2GNFZw5g1SQ-78OntXj9BSXR6rY-vF5zFz1FYbZbUYlW9Ab7xxqir"
   key_vault_id = "${azurerm_key_vault.vault.id}"
+  depends_on   = [azurerm_key_vault_access_policy.terraform-access-policy]
 }
-
 
 #LIVE ENGz8_7mkCMf1fjFXHhFxrh3PPpKbRm81kR0H04v1onwigVbrXSXmZVZCzQOKrfvF1TNlH03U0yq_WTD
 resource "azurerm_key_vault_secret" "paypal-client-secret" {
   name         = "PAYPAL-CLIENT-SECRET"
   value        = "AUwDTyJ7Ob8XKbR4S8WRqKBfX4q2GNFZw5g1SQ-78OntXj9BSXR6rY-vF5zFz1FYbZbUYlW9Ab7xxqir"
   key_vault_id = "${azurerm_key_vault.vault.id}"
+  depends_on   = [azurerm_key_vault_access_policy.terraform-access-policy]
 }
-
-
 
 resource "azurerm_key_vault_secret" "paypal-environment-secret" {
   name         = "PAYPAL-ENVIRONMENT"
   value        = "sandbox"
   key_vault_id = "${azurerm_key_vault.vault.id}"
+  depends_on   = [azurerm_key_vault_access_policy.terraform-access-policy]
 }
 
 # Azure Front Door for custom domain on static website (replaces deprecated CDN)
