@@ -252,13 +252,13 @@ resource "azurerm_key_vault_secret" "WIX-site-id" {
 
 resource "azurerm_key_vault_secret" "AUTHORIZENET-api-login-id" {
   name         = "AUTHORIZENET-API-LOGIN-ID"
-  value        = "4UpNc688bh4Y"
+  value        = "7SL5ke25"
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
 resource "azurerm_key_vault_secret" "AUTHORIZENET-transaction-key" {
   name         = "AUTHORIZENET-TRANSACTION-KEY"
-  value        = "9cuhCWm36Qf4A83q"
+  value        = "9Q942kX5dwU3y353"
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
@@ -270,7 +270,7 @@ resource "azurerm_key_vault_secret" "AUTHORIZENET-environment" {
 
 resource "azurerm_key_vault_secret" "AUTHORIZENET-client-key" {
   name         = "AUTHORIZENET-CLIENT-KEY"
-  value        = "29pfb49hBXF7yayV3yP6rZX9aPgQjLyJ739agN5Xwh8y64KZw7a96eGY54p93vyg"
+  value        = "5Wjac683WVdza2DGzxHu68jDP37ERGYz98wPVUKhvtM6e438MapP9L6zFZgwNk3F"
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
@@ -296,6 +296,71 @@ resource "azurerm_key_vault_secret" "paypal-environment-secret" {
   name         = "PAYPAL-ENVIRONMENT"
   value        = "sandbox"
   key_vault_id = "${azurerm_key_vault.vault.id}"
+}
+
+# Azure CDN for custom domain on static website
+resource "azurerm_cdn_profile" "thirdrail_cdn" {
+  name                = "thirdrail-cdn-${local.environment}"
+  location            = "global"
+  resource_group_name = azurerm_resource_group.thirdrail_rg.name
+  sku                 = "Standard_Microsoft"
+  tags                = local.common_tags
+}
+
+resource "azurerm_cdn_endpoint" "thirdrail_cdn_endpoint" {
+  name                = "thirdrail-preorder-${local.environment}"
+  profile_name        = azurerm_cdn_profile.thirdrail_cdn.name
+  location            = "global"
+  resource_group_name = azurerm_resource_group.thirdrail_rg.name
+
+  origin_host_header = azurerm_storage_account.thirdrail_resources_sa.primary_web_host
+
+  origin {
+    name      = "storagestaticwebsite"
+    host_name = azurerm_storage_account.thirdrail_resources_sa.primary_web_host
+  }
+
+  delivery_rule {
+    name  = "EnforceHTTPS"
+    order = 1
+
+    request_scheme_condition {
+      operator     = "Equal"
+      match_values = ["HTTP"]
+    }
+
+    url_redirect_action {
+      redirect_type = "Found"
+      protocol      = "Https"
+    }
+  }
+
+  delivery_rule {
+    name  = "SPARewrite"
+    order = 2
+
+    url_file_extension_condition {
+      operator     = "LessThan"
+      match_values = ["1"]
+    }
+
+    url_rewrite_action {
+      source_pattern          = "/"
+      destination             = "/index.html"
+      preserve_unmatched_path = false
+    }
+  }
+}
+
+resource "azurerm_cdn_endpoint_custom_domain" "preorder_domain" {
+  name            = "paymentportal"
+  cdn_endpoint_id = azurerm_cdn_endpoint.thirdrail_cdn_endpoint.id
+  host_name       = "paymentportal.thirdandtownsendmodels.com"
+
+  cdn_managed_https {
+    certificate_type = "Dedicated"
+    protocol_type    = "ServerNameIndication"
+  }
 }
 
 
