@@ -24,18 +24,14 @@ resource "azurerm_service_plan" "thirdrail_sp" {
   sku_name            = "B1"
 }
 
-resource "azurerm_storage_account" "thirdrail_resources_sa" {
-  name                     = "thirdrail${local.environment}resources"
-  resource_group_name      = azurerm_resource_group.thirdrail_rg.name
-  location                 = azurerm_resource_group.thirdrail_rg.location
-  account_tier             = "Standard"
-  account_replication_type = "GRS"
-}
-
-resource "azurerm_storage_account_static_website" "thirdrail_resources_sa_website" {
-  storage_account_id = azurerm_storage_account.thirdrail_resources_sa.id
-  error_404_document = "index.html"
-  index_document     = "index.html"
+# Azure Static Web App for payment portal frontend
+resource "azurerm_static_web_app" "thirdrail_portal" {
+  name                = "thirdrail-portal-${local.environment}"
+  resource_group_name = azurerm_resource_group.thirdrail_rg.name
+  location            = local.location
+  sku_tier            = "Free"
+  sku_size            = "Free"
+  tags                = local.common_tags
 }
 
 resource "random_integer" "ri" {
@@ -202,36 +198,9 @@ resource "azurerm_key_vault_access_policy" "daniel-access-policy" {
 
 }
 
-resource "azurerm_key_vault_secret" "azure-blob-key" {
-  name         = "AZURE-STORAGE-KEY"
-  value        = azurerm_storage_account.thirdrail_resources_sa.primary_access_key
-  key_vault_id = "${azurerm_key_vault.vault.id}"
-    depends_on = [
-    azurerm_key_vault_access_policy.terraform-access-policy
-  ]
-}
-
-resource "azurerm_key_vault_secret" "azure-blob-name" {
-  name         = "AZURE-STORAGE-NAME"
-  value        = azurerm_storage_account.thirdrail_resources_sa.name
-  key_vault_id = "${azurerm_key_vault.vault.id}"
-    depends_on = [
-    azurerm_key_vault_access_policy.terraform-access-policy
-  ]
-}
-
-resource "azurerm_key_vault_secret" "azure-blob-endpoint" {
-  name         = "AZURE-BLOB-ENDPOINT"
-  value        = azurerm_storage_account.thirdrail_resources_sa.primary_blob_endpoint
-  key_vault_id = "${azurerm_key_vault.vault.id}"
-    depends_on = [
-    azurerm_key_vault_access_policy.terraform-access-policy
-  ]
-}
-
-resource "azurerm_key_vault_secret" "azure-staticsite-endpoint" {
+resource "azurerm_key_vault_secret" "static-webapp-url" {
   name         = "STATIC-WEBSITE-BASE-URL"
-  value        = azurerm_storage_account.thirdrail_resources_sa.primary_web_endpoint
+  value        = "https://${azurerm_static_web_app.thirdrail_portal.default_host_name}"
   key_vault_id = "${azurerm_key_vault.vault.id}"
     depends_on = [
     azurerm_key_vault_access_policy.terraform-access-policy
@@ -324,12 +293,12 @@ resource "azurerm_cdn_frontdoor_origin_group" "thirdrail_origin_group" {
 }
 
 resource "azurerm_cdn_frontdoor_origin" "thirdrail_origin" {
-  name                          = "storagestaticwebsite"
+  name                          = "staticwebapp"
   cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.thirdrail_origin_group.id
 
   enabled                        = true
-  host_name                      = azurerm_storage_account.thirdrail_resources_sa.primary_web_host
-  origin_host_header             = azurerm_storage_account.thirdrail_resources_sa.primary_web_host
+  host_name                      = azurerm_static_web_app.thirdrail_portal.default_host_name
+  origin_host_header             = azurerm_static_web_app.thirdrail_portal.default_host_name
   http_port                      = 80
   https_port                     = 443
   certificate_name_check_enabled = true

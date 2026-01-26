@@ -3,9 +3,15 @@ output "frontdoor_endpoint_hostname" {
   value       = azurerm_cdn_frontdoor_endpoint.thirdrail_endpoint.host_name
 }
 
-output "static_website_url" {
-  description = "Static website URL (direct storage access)"
-  value       = azurerm_storage_account.thirdrail_resources_sa.primary_web_endpoint
+output "static_webapp_url" {
+  description = "Static Web App URL (direct access)"
+  value       = "https://${azurerm_static_web_app.thirdrail_portal.default_host_name}"
+}
+
+output "static_webapp_api_key" {
+  description = "API key for deploying to Static Web App"
+  value       = azurerm_static_web_app.thirdrail_portal.api_key
+  sensitive   = true
 }
 
 output "custom_domain_url" {
