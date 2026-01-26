@@ -23,3 +23,13 @@ output "custom_domain_validation_token" {
   description = "TXT record value for domain validation"
   value       = azurerm_cdn_frontdoor_custom_domain.paymentportal.validation_token
 }
+
+output "api_domain_url" {
+  description = "API custom domain URL"
+  value       = "https://api.paymentportal.thirdandtownsendmodels.com"
+}
+
+output "api_domain_validation_token" {
+  description = "TXT record value for API domain validation"
+  value       = azurerm_cdn_frontdoor_custom_domain.api_domain.validation_token
+}

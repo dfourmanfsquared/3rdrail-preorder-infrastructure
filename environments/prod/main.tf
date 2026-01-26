@@ -291,7 +291,7 @@ resource "azurerm_cdn_frontdoor_origin_group" "thirdrail_origin_group" {
 
   health_probe {
     path                = "/"
-    request_type        = "HEAD"
+    request_type        = "GET"
     protocol            = "Https"
     interval_in_seconds = 100
   }
@@ -342,6 +342,66 @@ resource "azurerm_cdn_frontdoor_custom_domain" "paymentportal" {
 resource "azurerm_cdn_frontdoor_custom_domain_association" "paymentportal_assoc" {
   cdn_frontdoor_custom_domain_id = azurerm_cdn_frontdoor_custom_domain.paymentportal.id
   cdn_frontdoor_route_ids        = [azurerm_cdn_frontdoor_route.thirdrail_route.id]
+}
+
+# API Backend - Origin Group for App Service
+resource "azurerm_cdn_frontdoor_origin_group" "api_origin_group" {
+  name                     = "thirdrail-api-origin-group"
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.thirdrail_frontdoor.id
+
+  load_balancing {
+    sample_size                 = 4
+    successful_samples_required = 3
+  }
+
+  health_probe {
+    path                = "/health"
+    request_type        = "GET"
+    protocol            = "Https"
+    interval_in_seconds = 100
+  }
+}
+
+resource "azurerm_cdn_frontdoor_origin" "api_origin" {
+  name                          = "appservice"
+  cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.api_origin_group.id
+
+  enabled                        = true
+  host_name                      = azurerm_linux_web_app.thirdrail-service-app.default_hostname
+  origin_host_header             = azurerm_linux_web_app.thirdrail-service-app.default_hostname
+  http_port                      = 80
+  https_port                     = 443
+  certificate_name_check_enabled = true
+}
+
+resource "azurerm_cdn_frontdoor_custom_domain" "api_domain" {
+  name                     = "api-paymentportal"
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.thirdrail_frontdoor.id
+  host_name                = "api.paymentportal.thirdandtownsendmodels.com"
+
+  tls {
+    certificate_type = "ManagedCertificate"
+  }
+}
+
+resource "azurerm_cdn_frontdoor_route" "api_route" {
+  name                          = "thirdrail-api-route"
+  cdn_frontdoor_endpoint_id     = azurerm_cdn_frontdoor_endpoint.thirdrail_endpoint.id
+  cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.api_origin_group.id
+  cdn_frontdoor_origin_ids      = [azurerm_cdn_frontdoor_origin.api_origin.id]
+
+  supported_protocols    = ["Http", "Https"]
+  patterns_to_match      = ["/*"]
+  forwarding_protocol    = "HttpsOnly"
+  link_to_default_domain = false
+  https_redirect_enabled = true
+
+  cdn_frontdoor_custom_domain_ids = [azurerm_cdn_frontdoor_custom_domain.api_domain.id]
+}
+
+resource "azurerm_cdn_frontdoor_custom_domain_association" "api_assoc" {
+  cdn_frontdoor_custom_domain_id = azurerm_cdn_frontdoor_custom_domain.api_domain.id
+  cdn_frontdoor_route_ids        = [azurerm_cdn_frontdoor_route.api_route.id]
 }
 
 
