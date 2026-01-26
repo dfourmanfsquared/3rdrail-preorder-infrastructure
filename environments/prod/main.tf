@@ -275,18 +275,18 @@ resource "azurerm_key_vault_secret" "AUTHORIZENET-client-key" {
 }
 
 
-
+#LIVE AciPv-bQ1ZLnqGKMYQUQ7kxCN9RhnxY10C5UX55YKKTpa3yCrh7gJejKpuB38txKfKk_LHd7WTnSrg6W
 resource "azurerm_key_vault_secret" "paypal-client-id-secret" {
   name         = "PAYPAL-CLIENT-ID"
-  value        = "AZTzsoATQwMulUG6Lsga62w0c3J6KOdogGKqO-IIlG3MByxtMO2pj6r_7N5a2YHMRyEPnzloWdATG0E-"
+  value        = "AUwDTyJ7Ob8XKbR4S8WRqKBfX4q2GNFZw5g1SQ-78OntXj9BSXR6rY-vF5zFz1FYbZbUYlW9Ab7xxqir"
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
 
-
+#LIVE ENGz8_7mkCMf1fjFXHhFxrh3PPpKbRm81kR0H04v1onwigVbrXSXmZVZCzQOKrfvF1TNlH03U0yq_WTD
 resource "azurerm_key_vault_secret" "paypal-client-secret" {
   name         = "PAYPAL-CLIENT-SECRET"
-  value        = "EGJYNyA9ZXnVJ0ahpcoviGXkm3kwOJiKbVgDAI4DpHMRnH5d_92U9bW8YHEfn0ciwWqZdLs9eDs1MpAM"
+  value        = "AUwDTyJ7Ob8XKbR4S8WRqKBfX4q2GNFZw5g1SQ-78OntXj9BSXR6rY-vF5zFz1FYbZbUYlW9Ab7xxqir"
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
@@ -298,69 +298,76 @@ resource "azurerm_key_vault_secret" "paypal-environment-secret" {
   key_vault_id = "${azurerm_key_vault.vault.id}"
 }
 
-# Azure CDN for custom domain on static website
-resource "azurerm_cdn_profile" "thirdrail_cdn" {
-  name                = "thirdrail-cdn-${local.environment}"
-  location            = "global"
+# Azure Front Door for custom domain on static website (replaces deprecated CDN)
+resource "azurerm_cdn_frontdoor_profile" "thirdrail_frontdoor" {
+  name                = "thirdrail-fd-${local.environment}"
   resource_group_name = azurerm_resource_group.thirdrail_rg.name
-  sku                 = "Standard_Microsoft"
+  sku_name            = "Standard_AzureFrontDoor"
   tags                = local.common_tags
 }
 
-resource "azurerm_cdn_endpoint" "thirdrail_cdn_endpoint" {
-  name                = "thirdrail-preorder-${local.environment}"
-  profile_name        = azurerm_cdn_profile.thirdrail_cdn.name
-  location            = "global"
-  resource_group_name = azurerm_resource_group.thirdrail_rg.name
+resource "azurerm_cdn_frontdoor_origin_group" "thirdrail_origin_group" {
+  name                     = "thirdrail-origin-group"
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.thirdrail_frontdoor.id
 
-  origin_host_header = azurerm_storage_account.thirdrail_resources_sa.primary_web_host
-
-  origin {
-    name      = "storagestaticwebsite"
-    host_name = azurerm_storage_account.thirdrail_resources_sa.primary_web_host
+  load_balancing {
+    sample_size                 = 4
+    successful_samples_required = 3
   }
 
-  delivery_rule {
-    name  = "EnforceHTTPS"
-    order = 1
-
-    request_scheme_condition {
-      operator     = "Equal"
-      match_values = ["HTTP"]
-    }
-
-    url_redirect_action {
-      redirect_type = "Found"
-      protocol      = "Https"
-    }
-  }
-
-  delivery_rule {
-    name  = "SPARewrite"
-    order = 2
-
-    url_file_extension_condition {
-      operator     = "LessThan"
-      match_values = ["1"]
-    }
-
-    url_rewrite_action {
-      source_pattern          = "/"
-      destination             = "/index.html"
-      preserve_unmatched_path = false
-    }
+  health_probe {
+    path                = "/"
+    request_type        = "HEAD"
+    protocol            = "Https"
+    interval_in_seconds = 100
   }
 }
 
-resource "azurerm_cdn_endpoint_custom_domain" "preorder_domain" {
-  name            = "paymentportal"
-  cdn_endpoint_id = azurerm_cdn_endpoint.thirdrail_cdn_endpoint.id
-  host_name       = "paymentportal.thirdandtownsendmodels.com"
+resource "azurerm_cdn_frontdoor_origin" "thirdrail_origin" {
+  name                          = "storagestaticwebsite"
+  cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.thirdrail_origin_group.id
 
-  cdn_managed_https {
-    certificate_type = "Dedicated"
-    protocol_type    = "ServerNameIndication"
+  enabled                        = true
+  host_name                      = azurerm_storage_account.thirdrail_resources_sa.primary_web_host
+  origin_host_header             = azurerm_storage_account.thirdrail_resources_sa.primary_web_host
+  http_port                      = 80
+  https_port                     = 443
+  certificate_name_check_enabled = true
+}
+
+resource "azurerm_cdn_frontdoor_endpoint" "thirdrail_endpoint" {
+  name                     = "thirdrail-preorder-${local.environment}"
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.thirdrail_frontdoor.id
+}
+
+resource "azurerm_cdn_frontdoor_route" "thirdrail_route" {
+  name                          = "thirdrail-route"
+  cdn_frontdoor_endpoint_id     = azurerm_cdn_frontdoor_endpoint.thirdrail_endpoint.id
+  cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.thirdrail_origin_group.id
+  cdn_frontdoor_origin_ids      = [azurerm_cdn_frontdoor_origin.thirdrail_origin.id]
+
+  supported_protocols    = ["Http", "Https"]
+  patterns_to_match      = ["/*"]
+  forwarding_protocol    = "HttpsOnly"
+  link_to_default_domain = true
+  https_redirect_enabled = true
+
+  cdn_frontdoor_custom_domain_ids = [azurerm_cdn_frontdoor_custom_domain.paymentportal.id]
+}
+
+resource "azurerm_cdn_frontdoor_custom_domain" "paymentportal" {
+  name                     = "paymentportal"
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.thirdrail_frontdoor.id
+  host_name                = "paymentportal.thirdandtownsendmodels.com"
+
+  tls {
+    certificate_type = "ManagedCertificate"
   }
+}
+
+resource "azurerm_cdn_frontdoor_custom_domain_association" "paymentportal_assoc" {
+  cdn_frontdoor_custom_domain_id = azurerm_cdn_frontdoor_custom_domain.paymentportal.id
+  cdn_frontdoor_route_ids        = [azurerm_cdn_frontdoor_route.thirdrail_route.id]
 }
 
 
