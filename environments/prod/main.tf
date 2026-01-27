@@ -21,7 +21,7 @@ resource "azurerm_service_plan" "thirdrail_sp" {
   resource_group_name = azurerm_resource_group.thirdrail_rg.name
   location            = azurerm_resource_group.thirdrail_rg.location
   os_type             = "Linux"
-  sku_name            = "P0V3"
+  sku_name            = "P0v3"
 }
 
 # Azure Static Web App for payment portal frontend
