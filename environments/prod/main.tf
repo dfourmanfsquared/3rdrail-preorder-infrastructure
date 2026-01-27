@@ -24,6 +24,15 @@ resource "azurerm_service_plan" "thirdrail_sp" {
   sku_name            = "P0v3"
 }
 
+# Application Insights for frontend monitoring
+resource "azurerm_application_insights" "frontend_insights" {
+  name                = "thirdrail-frontend-insights-${local.environment}"
+  location            = azurerm_resource_group.thirdrail_rg.location
+  resource_group_name = azurerm_resource_group.thirdrail_rg.name
+  application_type    = "web"
+  tags                = local.common_tags
+}
+
 # Azure Static Web App for payment portal frontend
 resource "azurerm_static_web_app" "thirdrail_portal" {
   name                = "thirdrail-portal-${local.environment}"

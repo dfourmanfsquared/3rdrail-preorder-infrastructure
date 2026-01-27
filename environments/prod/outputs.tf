@@ -33,3 +33,15 @@ output "api_domain_validation_token" {
   description = "TXT record value for API domain validation"
   value       = azurerm_cdn_frontdoor_custom_domain.api_domain.validation_token
 }
+
+output "appinsights_connection_string" {
+  description = "Application Insights connection string for frontend"
+  value       = azurerm_application_insights.frontend_insights.connection_string
+  sensitive   = true
+}
+
+output "appinsights_instrumentation_key" {
+  description = "Application Insights instrumentation key for frontend"
+  value       = azurerm_application_insights.frontend_insights.instrumentation_key
+  sensitive   = true
+}
