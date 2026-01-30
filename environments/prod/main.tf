@@ -246,7 +246,7 @@ resource "azurerm_key_vault_secret" "AUTHORIZENET-transaction-key" {
 
 resource "azurerm_key_vault_secret" "AUTHORIZENET-environment" {
   name         = "AUTHORIZENET-ENVIRONMENT"
-  value        = "sandbox"
+  value        = "production"
   key_vault_id = "${azurerm_key_vault.vault.id}"
   depends_on   = [azurerm_key_vault_access_policy.terraform-access-policy]
 }
@@ -261,7 +261,7 @@ resource "azurerm_key_vault_secret" "AUTHORIZENET-client-key" {
 #LIVE AciPv-bQ1ZLnqGKMYQUQ7kxCN9RhnxY10C5UX55YKKTpa3yCrh7gJejKpuB38txKfKk_LHd7WTnSrg6W
 resource "azurerm_key_vault_secret" "paypal-client-id-secret" {
   name         = "PAYPAL-CLIENT-ID"
-  value        = "AUwDTyJ7Ob8XKbR4S8WRqKBfX4q2GNFZw5g1SQ-78OntXj9BSXR6rY-vF5zFz1FYbZbUYlW9Ab7xxqir"
+  value        = "AZnQjH3xGyZQXhRYV9n_O3mmL_TGaQnTb5-TV1HWbBnvco_u_mnWcwguUh994098VFHOgmgQf1aE-l4b"
   key_vault_id = "${azurerm_key_vault.vault.id}"
   depends_on   = [azurerm_key_vault_access_policy.terraform-access-policy]
 }
@@ -269,7 +269,7 @@ resource "azurerm_key_vault_secret" "paypal-client-id-secret" {
 #LIVE ENGz8_7mkCMf1fjFXHhFxrh3PPpKbRm81kR0H04v1onwigVbrXSXmZVZCzQOKrfvF1TNlH03U0yq_WTD
 resource "azurerm_key_vault_secret" "paypal-client-secret" {
   name         = "PAYPAL-CLIENT-SECRET"
-  value        = "AUwDTyJ7Ob8XKbR4S8WRqKBfX4q2GNFZw5g1SQ-78OntXj9BSXR6rY-vF5zFz1FYbZbUYlW9Ab7xxqir"
+  value        = "EIl56MmfiJY9NvWmP8sczFko8M91dyNRyNpp1hG01bPFbDrDnYjHKuD1wd5bul8cE6dys7ttP4vQvV1R"
   key_vault_id = "${azurerm_key_vault.vault.id}"
   depends_on   = [azurerm_key_vault_access_policy.terraform-access-policy]
 }
