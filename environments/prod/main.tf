@@ -93,9 +93,10 @@ resource "azurerm_linux_web_app" "thirdrail-service-app" {
     health_check_eviction_time_in_min = 5
   }
 
-app_settings ={
-
-    "AZURE_VAULT_URI" = azurerm_key_vault.vault.vault_uri
+app_settings = {
+    "AZURE_VAULT_URI"                       = azurerm_key_vault.vault.vault_uri
+    "APPLICATIONINSIGHTS_CONNECTION_STRING" = azurerm_application_insights.frontend_insights.connection_string
+    "APPINSIGHTS_INSTRUMENTATIONKEY"        = azurerm_application_insights.frontend_insights.instrumentation_key
 }
 
   identity {
