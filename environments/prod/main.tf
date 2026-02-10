@@ -240,7 +240,7 @@ resource "azurerm_key_vault_secret" "AUTHORIZENET-api-login-id" {
 
 resource "azurerm_key_vault_secret" "AUTHORIZENET-transaction-key" {
   name         = "AUTHORIZENET-TRANSACTION-KEY"
-  value        = "9Q942kX5dwU3y353"
+  value        = "58C9z26dKSYy5h98"
   key_vault_id = "${azurerm_key_vault.vault.id}"
   depends_on   = [azurerm_key_vault_access_policy.terraform-access-policy]
 }
