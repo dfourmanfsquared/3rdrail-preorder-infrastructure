@@ -30,6 +30,7 @@ resource "azurerm_application_insights" "frontend_insights" {
   location            = azurerm_resource_group.thirdrail_rg.location
   resource_group_name = azurerm_resource_group.thirdrail_rg.name
   application_type    = "web"
+  retention_in_days   = 365
   tags                = local.common_tags
 }
 
@@ -280,6 +281,13 @@ resource "azurerm_key_vault_secret" "paypal-client-secret" {
 resource "azurerm_key_vault_secret" "paypal-environment-secret" {
   name         = "PAYPAL-ENVIRONMENT"
   value        = "production"
+  key_vault_id = "${azurerm_key_vault.vault.id}"
+  depends_on   = [azurerm_key_vault_access_policy.terraform-access-policy]
+}
+
+resource "azurerm_key_vault_secret" "admin-emails" {
+  name         = "ADMIN-EMAILS"
+  value        = "DLFourman@gmail.com,info@thirdandtownsendmodels.com"
   key_vault_id = "${azurerm_key_vault.vault.id}"
   depends_on   = [azurerm_key_vault_access_policy.terraform-access-policy]
 }
